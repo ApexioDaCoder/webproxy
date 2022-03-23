@@ -3,6 +3,7 @@ var ProxyMiddleware = require('http-proxy-middleware');
 const path = require('path')
 const fs = require('fs')
 let app = express()
+const cors = require('cors')
 var Proxy = require('./Proxy')
 let { blockedSites, urlModify, httpprefix, serverName, port, locationReplaceMap302, regReplaceMap, siteSpecificReplace, pathReplace } = require('./config')
 
@@ -36,6 +37,7 @@ const middle1 = (req, res, next) => {
 }
 app.use(middle1)
 app.use(proxy)
+app.use(cors())
 
 let reallistenPort = process.env.PORT || 8011
 app.listen(reallistenPort)
