@@ -7,7 +7,7 @@ const {CookieAccessInfo, CookieJar, Cookie} = cookiejar
 
 let config = {
     httpprefix: 'https', port: 443,
-    serverName: 'siteproxy.netptop.workers.dev',
+    serverName: 'proxy.apexio.dev',
 }
 let blockedSites = ['www.chase.com'] // accessing to chase.com was reported by google
 
@@ -18,7 +18,7 @@ config.serverName = config.serverName.replace(/https?:\/\//g, '')
 console.log(`config.serverName:${config.serverName}`)
 if (process.env.localFlag === 'true') {
     config.httpprefix = 'http'
-    config.port = '8011'
+    config.port = '80'
     process.env.PORT = config.port
     config.serverName = '127.0.0.1'
 }
