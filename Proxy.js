@@ -163,7 +163,6 @@ let Proxy = ({ ProxyMiddleware, blockedSites, urlModify, httpprefix, serverName,
         return true
     }
     let handleRespond = ({ req, res, body, gbFlag }) => { // text file
-        res = enableCors(req, res)
         let myRe
         let { host, httpType } = getHostFromReq({ req, serverName })
         if (locationMod302({ res, serverName, httpprefix, host, httpType }) === false) {
