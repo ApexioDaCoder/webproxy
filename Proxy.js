@@ -327,10 +327,12 @@ let Proxy = ({ ProxyMiddleware, blockedSites, urlModify, httpprefix, serverName,
                 } else { // in node environment
                     body = Buffer.concat(bodyList) // body is Buffer
                 }
+
                 console.log(`on end 2, body.length:${body.length}`)
                 let gbFlag = false
                 if (proxyRes.headers["content-encoding"] === 'gzip' ||
                     proxyRes.headers["content-encoding"] === 'br') { // gzip/br encoding
+                    console.log("gzip")
                     let gunzipped
                     try {
                         if (process.env.cloudflare === 'true') { // in cloudflare environment
@@ -385,10 +387,7 @@ let Proxy = ({ ProxyMiddleware, blockedSites, urlModify, httpprefix, serverName,
                             // fetching sw.js
                             res.setHeader('service-worker-allowed', '/')
                         }
-                        if (host.includes("youtube.com")) {
-                            console.log("yt")
-                            console.log(req.url.endsWith("serviceworker-kevlar-appshell.js"))
-                        }
+
                         handleRespond({ req, res, body, gbFlag }) // body is a displayed string
                     } else { // gzip and non-text
                         // console.log(`2========>${logGet()}`)
@@ -405,6 +404,7 @@ let Proxy = ({ ProxyMiddleware, blockedSites, urlModify, httpprefix, serverName,
                     }
                 } else if (proxyRes.statusCode === 301 || proxyRes.statusCode === 302 || proxyRes.statusCode === 307 || proxyRes.statusCode === 308 ||
                     contentTypeIsText(proxyRes.headers) === true) { // text with non gzip encoding
+                    console.log("utf8")
                     logSave(`utf-8 text...`)
                     let originBody = body
                     if (process.env.cloudflare === 'true') { // in cloudflare environment
@@ -419,6 +419,7 @@ let Proxy = ({ ProxyMiddleware, blockedSites, urlModify, httpprefix, serverName,
                         body = iconv.decode(originBody, 'gbk')
                         gbFlag = true
                     }
+                    //body = "" + body
                     handleRespond({ req, res, body, gbFlag })
                 } else { // non-gzip and non-text body
                     logSave(`3========>${logGet()}`)
@@ -432,6 +433,7 @@ let Proxy = ({ ProxyMiddleware, blockedSites, urlModify, httpprefix, serverName,
                         res.end(body)
                     }
                 }
+                console.log("----------------------------------------------------")
             })
             const setCookieHeaders = proxyRes.headers['set-cookie'] || []
             console.log(`1`)
@@ -558,7 +560,7 @@ let Proxy = ({ ProxyMiddleware, blockedSites, urlModify, httpprefix, serverName,
             if (host.indexOf('youtube.com') !== -1) {
                 // proxyReq.setHeader('User-Agent', `Opera/7.50 (Windows XP; U)`)
                 // proxyReq.setHeader('User-Agent', `Opera/9.80 (Android 4.1.2; Linux; Opera Mobi/ADR-1305251841) Presto/2.11.355 Version/12.10`)
-                // proxyReq.setHeader('User-Agent', `Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0`)
+                // proxyReq.setHeader('User-Agent', `Mozilla/5.0 (Windows NT 10; Win64; x64; rv:47.0) Gecko/20100101 Firefox/97.0`)
             }
             logSave(`req host:${host}, req.url:${req.url}, proxyReq.query:${proxyReq.query} proxyReq.path:${proxyReq.path}, proxyReq.url:${proxyReq.url} proxyReq headers:${JSON.stringify(proxyReq.getHeaders())}`)
             if (host === '' || !host) {
