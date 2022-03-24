@@ -385,6 +385,10 @@ let Proxy = ({ ProxyMiddleware, blockedSites, urlModify, httpprefix, serverName,
                             // fetching sw.js
                             res.setHeader('service-worker-allowed', '/')
                         }
+                        if (host.includes("youtube.com")) {
+                            console.log("yt")
+                            console.log(req.url.endsWith("serviceworker-kevlar-appshell.js"))
+                        }
                         handleRespond({ req, res, body, gbFlag }) // body is a displayed string
                     } else { // gzip and non-text
                         // console.log(`2========>${logGet()}`)
